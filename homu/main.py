@@ -573,8 +573,13 @@ def main():
             db_query(db, 'DELETE FROM build_res WHERE repo = ? AND num = ? AND builder = ?', [repo_label, num, builder])
             continue
 
+        res = bool(res) if res is not None else None
+
+        if res is None:
+            logger.info('still waiting on results from ' + builder + ' for ' + merge_sha)
+
         state.build_res[builder] = {
-            'res': bool(res) if res is not None else None,
+            'res': res,
             'url': url,
         }
 
